@@ -20,7 +20,7 @@ export const DOM_CONTENT = () => {
             <button class='btn' id='new-project-btn'>New project</button>
             <div id='projects-list'></div>
         </section>
-        <section class='task-container'>
+        <section class='tasks-container'>
             <button class='btn' id='add-new-task-btn'>Add new task</button>
         </section>
         <button id='new-task-btn'>+</button>

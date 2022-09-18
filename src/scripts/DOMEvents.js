@@ -2,6 +2,8 @@ import { Task } from './task.js';
 import { Project } from './project.js';
 
 class UI {
+    
+    // displays the newly added task on the tasks list
     static addTask(task) {
         const tasksContainer = document.querySelector('.tasks-container');
         const card = document.createElement('div');
@@ -23,6 +25,7 @@ class UI {
         tasksContainer.appendChild(card);
     };
 
+    // creates the popup form at top of the tasks list
     static createForm() {
         const tasksContainer = document.querySelector('.tasks-container');
         const form = document.createElement('form');
@@ -37,6 +40,7 @@ class UI {
         form.innerHTML = `
         <input type='text' id='task-title' placeholder='Task title'>
         <input type='text' id='task-description' placeholder='Task description'>
+        <input type='text' id='task-due-date' placeholder='Task due date'>
         <select>${projectSelect.innerHTML}</select>
         <select id='task-priority'>
             <option value=''>Select priority</option>
@@ -52,10 +56,13 @@ class UI {
 };
 
 const DOM_EVENTS = () => {
-    // const ui = new UI();
     document.addEventListener('click', (e) => {
         if(e.target.matches('#addTaskFormBtn')) {
-            e.preventDefault();
+            const title = document.querySelector('#task-title').value;
+            const description = document.querySelector('#task-description').value;
+            const dueDate = document.querySelector('#task-due-date').value;
+            const project = document.querySelector('#task-project').value;
+            const priority = document.querySelector('#task-priority').value;
             const task = new Task(title, description, dueDate, priority, project);
             UI.addTask(task);
             console.log('Task added successfully)');
