@@ -8,16 +8,16 @@ class UI {
         const tasksContainer = document.querySelector('.tasks-container');
         const card = document.createElement('div');
         card.innerHTML = `
-        <div class=''>
-            <h3 class='task-property'>${task.title}</h3>
-            <h3 class='task-property'>${task.dueDate}</h3>
+        <div class='card-top'>
+            <h3 class='card-property card-title'>${task.title}</h3>
+            <h3 class='card-property card-due-date'>${task.dueDate}</h3>
             <button class='details-btn'>Details</button>
             <button class='delete-btn'>Delete</button>
         </div>
-        <div class='hidden'>
-            <h3 class='task-property'>${task.description}</h3>
-            <h3 class='task-property'>${task.project}</h3>
-            <h3 class='task-property'>${task.priority}</h3>
+        <div class='card-bottom hidden'>
+            <h3 class='card-property card-description'>${task.description}</h3>
+            <h3 class='card-property card-project'>${task.project}</h3>
+            <h3 class='card-property card-priority'>${task.priority}</h3>
             <button class='edit-btn'>Edit</button>
         </div>
         `
@@ -39,9 +39,9 @@ class UI {
             projectSelect.appendChild(option);
         });
         form.innerHTML = `
-        <input type='text' id='form-task-title' placeholder='Task title'>
-        <input type='text' id='form-task-description' placeholder='Task description'>
-        <input type='text' id='form-task-due-date' placeholder='Task due date'>
+        <input type='text' id='form-task-title' placeholder='Title'>
+        <input type='text' id='form-task-description' placeholder='Description'>
+        <input type='date' id='form-task-due-date'>
         <select id='form-task-project'>${projectSelect.innerHTML}</select>
         <select id='form-task-priority'>
             <option value=''>Select priority</option>
@@ -67,6 +67,19 @@ class UI {
         }
     }
 
+    static editForm(e) {
+        const title = document.querySelector('#form-task-title');
+        const description = document.querySelector('#form-task-description');
+        const dueDate = document.querySelector('#form-task-due-date');
+        const project = document.querySelector('#form-task-project');
+        const priority = document.querySelector('#form-task-priority');
+        title.value = e.children[0].children[0].textContent;
+        description.value = e.children[1].children[0].textContent;
+        dueDate.value = e.children[0].children[1].textContent;
+        project.value = e.children[1].children[1].textContent;
+        priority.value = e.children[1].children[2].textContent;
+    }
+
     // toggles elements display (show/hide)
     static toggleHiddenElement(e) {
         if(e.classList.contains('hidden')) {
@@ -74,6 +87,17 @@ class UI {
         } else {
             e.classList.add('hidden');
         }
+    }
+
+    static editTask(e) {
+        const tasksContainer = document.querySelector('.tasks-container');
+        const form = document.querySelector('.task-form');
+        const addNewTaskBtn = document.querySelector('#add-new-task-btn');
+        if(tasksContainer.children[0] !== form) {
+            this.createForm();
+            this.toggleHiddenElement(addNewTaskBtn);
+        }
+        this.editForm(e);
     }
 }
 
@@ -87,6 +111,8 @@ const DOM_EVENTS = () => {
             const project = document.querySelector('#form-task-project').value;
             const priority = document.querySelector('#form-task-priority').value;
             const task = new Task(title, description, dueDate, priority, project);
+            if(title === '') return console.log('Title cannot be empty');
+            if(priority === '') return console.log('Please select a priority');
             UI.addTask(task);
             console.log('Task created');
         }
@@ -98,16 +124,22 @@ const DOM_EVENTS = () => {
         if(e.target.matches('#cancelTaskFormBtn')) { // cancel form
             e.preventDefault()
             UI.removeForm();
-            console.log('Form cancelled')
+            console.log('Form cancelled');
         }
 
-        if(e.target.matches('.details-btn')) { // toggles card details
+        if(e.target.matches('.details-btn')) { // toggles card details visibility
             UI.toggleHiddenElement(e.target.parentElement.nextElementSibling)
         }
-        if(e.target.matches('.delete-btn')) { // deletes card
+        if(e.target.matches('.delete-btn')) { // deletes card completely
             const card = e.target.parentElement.parentElement;
             card.remove();
+            console.log('Card removed');
         }
+        if(e.target.matches('.edit-btn')) { // edits card details
+            const card = e.target.parentElement.parentElement;
+            UI.editTask(card);
+        }
+
     })
 }
 
