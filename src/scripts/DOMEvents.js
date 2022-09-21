@@ -8,13 +8,13 @@ class UI {
         const tasksContainer = document.querySelector('.tasks-container');
         const card = document.createElement('div');
         card.innerHTML = `
-        <div class='card'>
+        <div class=''>
             <h3 class='task-property'>${task.title}</h3>
             <h3 class='task-property'>${task.dueDate}</h3>
             <button class='details-btn'>Details</button>
             <button class='delete-btn'>Delete</button>
         </div>
-        <div class='card hidden'>
+        <div class='hidden'>
             <h3 class='task-property'>${task.description}</h3>
             <h3 class='task-property'>${task.project}</h3>
             <h3 class='task-property'>${task.priority}</h3>
@@ -75,9 +75,7 @@ class UI {
             e.classList.add('hidden');
         }
     }
-
-
-};
+}
 
 const DOM_EVENTS = () => {
     document.addEventListener('click', (e) => {
@@ -103,8 +101,12 @@ const DOM_EVENTS = () => {
             console.log('Form cancelled')
         }
 
-        if(e.target.matches('.details-btn')) {
+        if(e.target.matches('.details-btn')) { // toggles card details
             UI.toggleHiddenElement(e.target.parentElement.nextElementSibling)
+        }
+        if(e.target.matches('.delete-btn')) { // deletes card
+            const card = e.target.parentElement.parentElement;
+            card.remove();
         }
     })
 }
