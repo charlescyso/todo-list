@@ -61,9 +61,11 @@ class UI {
         const tasksContainer = document.querySelector('.tasks-container');
         const form = document.querySelector('.task-form');
         const addNewTaskBtn = document.querySelector('#add-new-task-btn');
-        if(tasksContainer.children[0] === form) { //if the second child of tasksContainer is form
+        const card = document.querySelector('.edited');
+        if(tasksContainer.children[0] === form) { //if the first child of tasksContainer is form
             form.remove(); // remove the form
             UI.toggleHiddenElement(addNewTaskBtn);
+            if(card) card.classList.remove('edited');
         }
     }
 
@@ -119,6 +121,7 @@ class UI {
         card.children[0].children[1].textContent = dueDate.value;
         card.children[1].children[1].textContent = project.value;
         card.children[1].children[2].textContent = priority.value;
+        this.removeForm();
     }
 }
 
