@@ -65,11 +65,11 @@ class UI {
     }
 
     // toggles elements display (show/hide)
-    static toggleHiddenElement(el) {
-        if(el.classList.contains('hidden')) {
-            el.classList.remove('hidden');
+    static toggleHiddenElement(e) {
+        if(e.classList.contains('hidden')) {
+            e.classList.remove('hidden');
         } else {
-            el.classList.add('hidden');
+            e.classList.add('hidden');
         }
     }
 
@@ -90,11 +90,14 @@ const DOM_EVENTS = () => {
             console.log('Task created');
         }
         if(e.target.matches('#add-new-task-btn')) { // create form
+            UI.toggleHiddenElement(e.target);
             UI.createForm();
             console.log('Form created');
         }
-        if(e.target.matches('#cancelTaskFormBtn')) {
+        if(e.target.matches('#cancelTaskFormBtn')) { // cancel form
             e.preventDefault()
+            const addNewTaskBtn = document.querySelector('#add-new-task-btn');
+            UI.toggleHiddenElement(addNewTaskBtn);
             UI.removeForm();
             console.log('Form cancelled')
         }
