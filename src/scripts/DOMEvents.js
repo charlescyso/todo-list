@@ -8,13 +8,13 @@ class UI {
         const tasksContainer = document.querySelector('.tasks-container');
         const card = document.createElement('div');
         card.innerHTML = `
-        <div class='card-show'>
+        <div class='card'>
             <h3 class='task-property'>${task.title}</h3>
             <h3 class='task-property'>${task.dueDate}</h3>
             <button class='details-btn'>Details</button>
             <button class='delete-btn'>Delete</button>
         </div>
-        <div class='card-hidden'>
+        <div class='card hidden'>
             <h3 class='task-property'>${task.description}</h3>
             <h3 class='task-property'>${task.project}</h3>
             <h3 class='task-property'>${task.priority}</h3>
@@ -23,6 +23,7 @@ class UI {
         `
         card.classList.add('card', task.priority);
         tasksContainer.appendChild(card);
+        UI.removeForm();
     };
 
     // creates the popup form at top of the tasks list
@@ -52,15 +53,17 @@ class UI {
         <button id='cancelTaskFormBtn'>Cancel</cancel>
         `
         form.classList.add('task-form');
-        tasksContainer.appendChild(form);
+        tasksContainer.insertAdjacentElement('afterbegin', form);
     }
 
     // removes form
     static removeForm() {
         const tasksContainer = document.querySelector('.tasks-container');
         const form = document.querySelector('.task-form');
-        if(tasksContainer.children[1] === form) { //if the second child of tasksContainer is form
+        const addNewTaskBtn = document.querySelector('#add-new-task-btn');
+        if(tasksContainer.children[0] === form) { //if the second child of tasksContainer is form
             form.remove(); // remove the form
+            UI.toggleHiddenElement(addNewTaskBtn);
         }
     }
 
@@ -72,6 +75,7 @@ class UI {
             e.classList.add('hidden');
         }
     }
+
 
 };
 
@@ -86,7 +90,6 @@ const DOM_EVENTS = () => {
             const priority = document.querySelector('#form-task-priority').value;
             const task = new Task(title, description, dueDate, priority, project);
             UI.addTask(task);
-            UI.removeForm();
             console.log('Task created');
         }
         if(e.target.matches('#add-new-task-btn')) { // create form
@@ -96,10 +99,12 @@ const DOM_EVENTS = () => {
         }
         if(e.target.matches('#cancelTaskFormBtn')) { // cancel form
             e.preventDefault()
-            const addNewTaskBtn = document.querySelector('#add-new-task-btn');
-            UI.toggleHiddenElement(addNewTaskBtn);
             UI.removeForm();
             console.log('Form cancelled')
+        }
+
+        if(e.target.matches('.details-btn')) {
+            UI.toggleHiddenElement(e.target.parentElement.nextElementSibling)
         }
     })
 }
