@@ -51,13 +51,33 @@ class UI {
         <button id='addTaskFormBtn'>Add</button>
         <button id='cancelTaskFormBtn'>Cancel</cancel>
         `
+        form.classList.add('task-form');
         tasksContainer.appendChild(form);
     }
+
+    // removes form
+    static removeForm() {
+        const tasksContainer = document.querySelector('.tasks-container');
+        const form = document.querySelector('.task-form');
+        if(tasksContainer.children[1] === form) { //if the second child of tasksContainer is form
+            form.remove(); // remove the form
+        }
+    }
+
+    // toggles elements display (show/hide)
+    static toggleHiddenElement(el) {
+        if(el.classList.contains('hidden')) {
+            el.classList.remove('hidden');
+        } else {
+            el.classList.add('hidden');
+        }
+    }
+
 };
 
 const DOM_EVENTS = () => {
     document.addEventListener('click', (e) => {
-        if(e.target.matches('#addTaskFormBtn')) {
+        if(e.target.matches('#addTaskFormBtn')) { // apply form values to task 
             e.preventDefault();
             const title = document.querySelector('#form-task-title').value;
             const description = document.querySelector('#form-task-description').value;
@@ -66,11 +86,17 @@ const DOM_EVENTS = () => {
             const priority = document.querySelector('#form-task-priority').value;
             const task = new Task(title, description, dueDate, priority, project);
             UI.addTask(task);
-            console.log('Task added successfully');
+            UI.removeForm();
+            console.log('Task created');
         }
-        if(e.target.matches('#add-new-task-btn')) {
+        if(e.target.matches('#add-new-task-btn')) { // create form
             UI.createForm();
-            console.log('Successfully created task form');
+            console.log('Form created');
+        }
+        if(e.target.matches('#cancelTaskFormBtn')) {
+            e.preventDefault()
+            UI.removeForm();
+            console.log('Form cancelled')
         }
     })
 }
