@@ -67,6 +67,7 @@ class UI {
         }
     }
 
+    // changes form values to card being edited
     static editForm(e) {
         const title = document.querySelector('#form-task-title');
         const description = document.querySelector('#form-task-description');
@@ -89,15 +90,35 @@ class UI {
         }
     }
 
+    // creates form and/or changes from values to card being edited
     static editTask(e) {
+        e.classList.add('edited');
         const tasksContainer = document.querySelector('.tasks-container');
         const form = document.querySelector('.task-form');
         const addNewTaskBtn = document.querySelector('#add-new-task-btn');
+        const confirmEditBtn = document.createElement('button');
+        confirmEditBtn.setAttribute('id', 'confirm-edit-btn');
+        confirmEditBtn.innerHTML = 'Confirm edit';
         if(tasksContainer.children[0] !== form) {
             this.createForm();
             this.toggleHiddenElement(addNewTaskBtn);
         }
+        if(document.querySelector('#addTaskFormBtn')) document.querySelector('#addTaskFormBtn').replaceWith(confirmEditBtn);
         this.editForm(e);
+    }
+
+    static confirmEdit() {
+        const card = document.querySelector('.edited');
+        const title = document.querySelector('#form-task-title');
+        const description = document.querySelector('#form-task-description');
+        const dueDate = document.querySelector('#form-task-due-date');
+        const project = document.querySelector('#form-task-project');
+        const priority = document.querySelector('#form-task-priority');
+        card.children[0].children[0].textContent = title.value;
+        card.children[1].children[0].textContent = description.value;
+        card.children[0].children[1].textContent = dueDate.value;
+        card.children[1].children[1].textContent = project.value;
+        card.children[1].children[2].textContent = priority.value;
     }
 }
 
@@ -139,7 +160,10 @@ const DOM_EVENTS = () => {
             const card = e.target.parentElement.parentElement;
             UI.editTask(card);
         }
-
+        if(e.target.matches('#confirm-edit-btn')) {
+            e.preventDefault();
+            UI.confirmEdit();
+        }
     })
 }
 
