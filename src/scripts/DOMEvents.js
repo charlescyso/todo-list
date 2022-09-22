@@ -109,6 +109,7 @@ class UI {
         this.editForm(e);
     }
 
+    // applies form details to edited card
     static confirmEdit() {
         const card = document.querySelector('.edited');
         const title = document.querySelector('#form-task-title');
@@ -122,6 +123,40 @@ class UI {
         card.children[1].children[1].textContent = project.value;
         card.children[1].children[2].textContent = priority.value;
         this.removeForm();
+    }
+
+    // creates a form for a new project
+    static createNewProjectForm() {
+        const container = document.querySelector('.side-bar-container');
+        const newProjectBtn = document.querySelector('#new-project-btn')
+        const form = document.createElement('form');
+        form.innerHTML = `
+        <input type='text' id='new-project-name' placeholder='Project name'>
+        <button id='add-project-btn'>Add</button>
+        <button id='cancel-project-btn'>Cancel</button>
+        `
+        form.classList.add('form-project')
+        container.insertBefore(form, newProjectBtn)
+        this.toggleHiddenElement(newProjectBtn);
+    }
+    
+    // creates a new project
+    static addNewProject() {
+        const list = document.querySelector('#projects-list');
+        const newProjectBtn = document.querySelector('#new-project-btn')
+        const projectItem = document.createElement('button');
+        const projectTitle = document.querySelector('#new-project-name').value;
+        if(projectTitle === '') return;
+        projectItem.value = projectTitle;
+        projectItem.textContent = projectTitle;
+        list.appendChild(projectItem);
+        this.toggleHiddenElement(newProjectBtn);
+        this.removeProjectForm();
+    }
+
+    static removeProjectForm() {
+        const form = document.querySelector('.form-project');
+        form.remove();
     }
 }
 
@@ -166,6 +201,18 @@ const DOM_EVENTS = () => {
         if(e.target.matches('#confirm-edit-btn')) {
             e.preventDefault();
             UI.confirmEdit();
+        }
+        if(e.target.matches('#new-project-btn')) {
+            UI.createNewProjectForm();
+        }
+        if(e.target.matches('#add-project-btn')) {
+            e.preventDefault();
+            UI.addNewProject();
+        }
+        if(e.target.matches('#cancel-project-btn')) {
+            e.preventDefault();
+            UI.removeProjectForm();
+            UI.toggleHiddenElement(document.querySelector('#new-project-btn'));
         }
     })
 }
