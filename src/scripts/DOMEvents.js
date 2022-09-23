@@ -1,6 +1,6 @@
 import { Task } from './task.js';
 import { Project } from './project.js';
-import { filterByProject, resetFilter} from './filter.js';
+import { filterByProject, resetFilter, todayTask, weekTask } from './filter.js';
 
 class UI {
     
@@ -245,6 +245,12 @@ const DOM_EVENTS = () => {
         }
         if(e.target.matches('#inbox-btn')) {
             resetFilter();
+        }
+        if(e.target.matches('#today-btn')) {
+            todayTask();
+        }
+        if(e.target.matches('#this-week-btn')) {
+            weekTask();
         }
     })
 }
