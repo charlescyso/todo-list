@@ -1,5 +1,6 @@
 import { Task } from './task.js';
 import { Project } from './project.js';
+import { filterByProject } from './filter.js';
 
 class UI {
     
@@ -145,6 +146,7 @@ class UI {
         const list = document.querySelector('#projects-list');
         const newProjectBtn = document.querySelector('#new-project-btn')
         const projectItem = document.createElement('button');
+        projectItem.classList.add('projectItem');
         const deleteProjectBtn = document.createElement('button');
         deleteProjectBtn.textContent = 'X';
         deleteProjectBtn.classList.add('deleteProjectBtn')
@@ -237,6 +239,9 @@ const DOM_EVENTS = () => {
             const project = e.target.parentElement; // targets the project button
             UI.deleteProject(project);
             UI.changeProjectAfterDeletion(project);
+        }
+        if(e.target.matches('.projectItem')) {
+            filterByProject(e.target)
         }
     })
 }
