@@ -16,7 +16,7 @@ export const DOM_CONTENT = () => {
             <h3 class='group-title' id='filter-title'>Filter</h3>
             <button class='btn' id='inbox-btn'>Inbox</button>
             <button class='btn' id='today-btn'>Today</button>
-            <button class='btn' id='upcoming-btn'>Upcoming</button>
+            <button class='btn' id='this-week-btn'>This week</button>
             <h3 class='group-title' id='projects-title'>Projects</h3>
             <button class='btn' id='new-project-btn'>New project</button>
             <div id='projects-list'></div>
