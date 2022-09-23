@@ -34,8 +34,8 @@ class UI {
         const options = ['Inbox', ...document.querySelector('#projects-list').children];
         options.forEach(op => {
             const option = document.createElement('option');
-            option.value = op.textContent || op;
-            option.textContent = op.textContent || op;
+            option.value = op.value || op;
+            option.textContent = op.value || op;
             projectSelect.appendChild(option);
         });
         form.innerHTML = `
@@ -145,10 +145,14 @@ class UI {
         const list = document.querySelector('#projects-list');
         const newProjectBtn = document.querySelector('#new-project-btn')
         const projectItem = document.createElement('button');
+        const deleteProjectBtn = document.createElement('button');
+        deleteProjectBtn.textContent = 'X';
+        deleteProjectBtn.classList.add('deleteProjectBtn')
         const projectTitle = document.querySelector('#new-project-name').value;
         if(projectTitle === '') return;
         projectItem.value = projectTitle;
         projectItem.textContent = projectTitle;
+        projectItem.appendChild(deleteProjectBtn);
         list.appendChild(projectItem);
         this.toggleHiddenElement(newProjectBtn);
         this.removeProjectForm();
@@ -157,6 +161,20 @@ class UI {
     static removeProjectForm() {
         const form = document.querySelector('.form-project');
         form.remove();
+    }
+
+    static deleteProject(project) {
+        project.remove();
+    }
+
+    static changeProjectAfterDeletion(project) {
+        const projectName = project.value;
+        const projects = document.querySelectorAll('.card-project');
+        projects.forEach(project => {
+            if(project.textContent.includes(projectName)) {
+                project.parentElement.parentElement.remove();
+            }
+        })
     }
 }
 
@@ -171,6 +189,7 @@ const DOM_EVENTS = () => {
             const priority = document.querySelector('#form-task-priority').value;
             const task = new Task(title, description, dueDate, priority, project);
             if(title === '') return console.log('Title cannot be empty');
+            if(title === 'Inbox') return console.log('Title cannot be Inbox');
             if(priority === '') return console.log('Please select a priority');
             UI.addTask(task);
             console.log('Task created');
@@ -213,6 +232,11 @@ const DOM_EVENTS = () => {
             e.preventDefault();
             UI.removeProjectForm();
             UI.toggleHiddenElement(document.querySelector('#new-project-btn'));
+        }
+        if(e.target.matches('.deleteProjectBtn')) {
+            const project = e.target.parentElement; // targets the project button
+            UI.deleteProject(project);
+            UI.changeProjectAfterDeletion(project);
         }
     })
 }
