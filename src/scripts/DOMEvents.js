@@ -1,6 +1,6 @@
 import { Task } from './task.js';
 import { Project } from './project.js';
-import { filterByProject } from './filter.js';
+import { filterByProject, resetFilter} from './filter.js';
 
 class UI {
     
@@ -241,7 +241,10 @@ const DOM_EVENTS = () => {
             UI.changeProjectAfterDeletion(project);
         }
         if(e.target.matches('.projectItem')) {
-            filterByProject(e.target)
+            filterByProject(e.target);
+        }
+        if(e.target.matches('#inbox-btn')) {
+            resetFilter();
         }
     })
 }
