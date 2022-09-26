@@ -1,6 +1,7 @@
 import { Task } from './task.js';
 import { Project } from './project.js';
 import { filterByProject, resetFilter, todayTask, weekTask } from './filter.js';
+// import { saveTaskToLocalStorage, clearLocalStorage } from './local_storage.js'
 
 class UI {
     
@@ -142,18 +143,16 @@ class UI {
     }
     
     // creates a new project
-    static addNewProject() {
+    static addNewProject(item) {
         const list = document.querySelector('#projects-list');
         const newProjectBtn = document.querySelector('#new-project-btn')
         const projectItem = document.createElement('button');
         projectItem.classList.add('projectItem');
         const deleteProjectBtn = document.createElement('button');
         deleteProjectBtn.textContent = '✖';
-        deleteProjectBtn.classList.add('deleteProjectBtn')
-        const projectTitle = document.querySelector('#new-project-name').value;
-        if(projectTitle === '') return;
-        projectItem.value = projectTitle;
-        projectItem.textContent = projectTitle;
+        deleteProjectBtn.classList.add('deleteProjectBtn');
+        projectItem.value = `${item.title}`;
+        projectItem.textContent = `${item.title}`;
         projectItem.appendChild(deleteProjectBtn);
         list.appendChild(projectItem);
         this.toggleHiddenElement(newProjectBtn);
@@ -186,6 +185,23 @@ class UI {
             card.classList.add('completed');
         }
     }
+
+    static toggleBtnActive(e) {
+        const filters = document.querySelectorAll('.btn');
+        const projectItems = document.querySelectorAll('.projectItem');
+        if(e.textContent === 'Add new task' || e.textContent === '＋New project') return;
+        if(e.classList.contains('btn-active')) {
+            return;
+        } else {
+            filters.forEach(filter => {
+                filter.classList.remove('btn-active');
+            });
+            projectItems.forEach(project => {
+                project.classList.remove('btn-active');
+            });
+            e.classList.add('btn-active');
+        }
+    }
 }
 
 const DOM_EVENTS = () => {
@@ -202,6 +218,7 @@ const DOM_EVENTS = () => {
             if(title === 'Inbox') return console.log('Title cannot be Inbox');
             if(priority === '') return console.log('Please select a priority');
             UI.addTask(task);
+            // saveTaskToLocalStorage(task);
             console.log('Task created');
         }
         if(e.target.matches('#add-new-task-btn')) { // create form
@@ -221,6 +238,7 @@ const DOM_EVENTS = () => {
         if(e.target.matches('.delete-btn')) { // deletes card completely
             const card = e.target.parentElement.parentElement;
             card.remove();
+            // clearLocalStorage(e);
             console.log('Card removed');
         }
         if(e.target.matches('.edit-btn')) { // edits card details
@@ -236,7 +254,10 @@ const DOM_EVENTS = () => {
         }
         if(e.target.matches('#add-project-btn')) {
             e.preventDefault();
-            UI.addNewProject();
+            const projectTitle = document.querySelector('#new-project-name').value;
+            if(projectTitle === '') return;
+            const project = new Project(projectTitle);
+            UI.addNewProject(project);
         }
         if(e.target.matches('#cancel-project-btn')) {
             e.preventDefault();
@@ -263,6 +284,9 @@ const DOM_EVENTS = () => {
         if(e.target.matches('.card-title')) {
             const card = e.target.parentElement.parentElement; // targets card
             UI.completeTask(card);
+        }
+        if(e.target.matches('.btn') ||e.target.matches('.projectItem') ) {
+            UI.toggleBtnActive(e.target);
         }
     })
 }
