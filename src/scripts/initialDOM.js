@@ -4,7 +4,9 @@ export const DOM_CONTENT = () => {
     const createHeader = (() => {
         const header = document.createElement('header');
         header.className = 'header-container';
-        header.innerHTML = ``;
+        header.innerHTML = `
+        <h2>Simple Todo List</h2>
+        `;
         content.appendChild(header);
     })();
 
@@ -18,7 +20,7 @@ export const DOM_CONTENT = () => {
             <button class='btn' id='today-btn'>Today</button>
             <button class='btn' id='this-week-btn'>This week</button>
             <h3 class='group-title' id='projects-title'>Projects</h3>
-            <button class='btn' id='new-project-btn'>New project</button>
+            <button class='btn' id='new-project-btn'>＋New project</button>
             <div id='projects-list'></div>
         </section>
         <section class='tasks-container'>

@@ -148,7 +148,7 @@ class UI {
         const projectItem = document.createElement('button');
         projectItem.classList.add('projectItem');
         const deleteProjectBtn = document.createElement('button');
-        deleteProjectBtn.textContent = 'X';
+        deleteProjectBtn.textContent = '✖';
         deleteProjectBtn.classList.add('deleteProjectBtn')
         const projectTitle = document.querySelector('#new-project-name').value;
         if(projectTitle === '') return;
