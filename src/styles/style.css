@@ -8,6 +8,10 @@
 }
 
 /* global classes */
+body {
+    font-family: sans-serif
+}
+
 body,
 button {
     color: var(--clr-body-text);
