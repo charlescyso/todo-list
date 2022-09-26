@@ -178,6 +178,14 @@ class UI {
             }
         })
     }
+
+    static completeTask(card) {
+        if(card.classList.contains('completed')) {
+            card.classList.remove('completed');
+        } else {
+            card.classList.add('completed');
+        }
+    }
 }
 
 const DOM_EVENTS = () => {
@@ -251,6 +259,10 @@ const DOM_EVENTS = () => {
         }
         if(e.target.matches('#this-week-btn')) {
             weekTask();
+        }
+        if(e.target.matches('.card-title')) {
+            const card = e.target.parentElement.parentElement; // targets card
+            UI.completeTask(card);
         }
     })
 }
